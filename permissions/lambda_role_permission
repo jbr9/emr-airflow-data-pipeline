@@ -1,0 +1,28 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "logs:CreateLogGroup",
+            "Resource": "arn:aws:logs:<REGION>:<ACCOUNT_ID>:*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Resource": [
+                "arn:aws:logs:<REGION>:<ACCOUNT_ID>:log-group:/aws/lambda/<LAMBDA_FUNCTION_NAME>:*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "airflow:CreateCliToken",
+                "airflow:PublishMetrics"
+            ],
+            "Resource": "arn:aws:airflow:<REGION>:<ACCOUNT_ID>:environment/<MWAA_ENVIRONMENT_NAME>"
+        }
+    ]
+}

@@ -1,0 +1,45 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:DeleteObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::<SOURCE_BUCKET_NAME>",
+        "arn:aws:s3:::<SOURCE_BUCKET_NAME>/*",
+        "arn:aws:s3:::<TARGET_BUCKET_NAME>",
+        "arn:aws:s3:::<TARGET_BUCKET_NAME>/*",
+        "arn:aws:s3:::<CODE_SOURCE/",
+        "arn:aws:s3:::<CODE_SOURCE>/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:GetLogEvents"
+      ],
+      "Resource": [
+        "arn:aws:logs:<AWS_REGION>:<AWS_ACCOUNT_ID>:log-group:<AIRFLOW_LOG_GROUP_PREFIX>*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "emr-serverless:ListApplications",
+        "emr-serverless:GetJobRun"
+      ],
+      "Resource": [
+        "arn:aws:emr-serverless:<AWS_REGION>:<AWS_ACCOUNT_ID>:/applications/*",
+        "arn:aws:emr-serverless:<AWS_REGION>:<AWS_ACCOUNT_ID>:/applications/*/jobruns/*"
+      ]
+    }
+  ]
+}

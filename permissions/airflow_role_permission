@@ -1,0 +1,130 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "airflow:PublishMetrics",
+                "airflow:CreateCliToken"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Deny",
+            "Action": "s3:ListAllMyBuckets",
+            "Resource": [
+                "arn:aws:s3:::<AIRFLOW_DAG_S3_BUCKET>",
+                "arn:aws:s3:::<AIRFLOW_DAG_S3_BUCKET>/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::<AIRFLOW_DAG_S3_BUCKET>",
+                "arn:aws:s3:::<AIRFLOW_DAG_S3_BUCKET>/*",
+                "arn:aws:s3:::<DATA_SOURCE_BUCKET>/source/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::<DATA_SOURCE_BUCKET>/*",
+                "arn:aws:s3:::<DATA_TARGET_BUCKET>/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogStream",
+                "logs:CreateLogGroup",
+                "logs:PutLogEvents",
+                "logs:GetLogEvents",
+                "logs:GetLogRecord",
+                "logs:GetLogGroupFields",
+                "logs:GetQueryResults"
+            ],
+            "Resource": [
+                "arn:aws:logs:us-east-1:<REDACTED_ACCOUNT_ID>:log-group:<REDACTED_LOG_GROUP_NAME>*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:DescribeLogGroups"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": "cloudwatch:PutMetricData",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "sqs:ChangeMessageVisibility",
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes",
+                "sqs:GetQueueUrl",
+                "sqs:ReceiveMessage",
+                "sqs:SendMessage"
+            ],
+            "Resource": "arn:aws:sqs:us-east-1:*:<REDACTED_SQS_NAME_PREFIX>*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "kms:Decrypt",
+                "kms:DescribeKey",
+                "kms:GenerateDataKey*",
+                "kms:Encrypt"
+            ],
+            "NotResource": "arn:aws:kms:*:<REDACTED_ACCOUNT_ID>:key/*",
+            "Condition": {
+                "StringLike": {
+                    "kms:ViaService": [
+                        "sqs.us-east-1.amazonaws.com"
+                    ]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "emr-serverless:CreateApplication",
+                "emr-serverless:StartJobRun",
+                "emr-serverless:ListApplications",
+                "emr-serverless:GetJobRun",
+                "emr-serverless:GetApplication",
+                "emr-serverless:StartApplication",
+                "emr-serverless:StopApplication",
+                "emr-serverless:UpdateApplication",
+                "emr-serverless:DeleteApplication",
+                "emr-serverless:CancelJobRun",
+                "emr-serverless:AccessLivyEndpoints",
+                "emr-serverless:AccessInteractiveEndpoints"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::<REDACTED_ACCOUNT_ID>:role/<EMR_SERVERLESS_DEFAULT_ROLE>",
+            "Condition": {
+                "StringEquals": {
+                    "iam:PassedToService": "emr-serverless.amazonaws.com"
+                }
+            }
+        }
+    ]
+}
